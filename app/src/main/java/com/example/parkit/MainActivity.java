@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "https://git.heroku.com/still-hamlet-70336.git";
-    //http://10.0.2.2:3000
+    private String BASE_URL = "http://10.0.2.2:3000";
+    //https://git.heroku.com/still-hamlet-70336.git
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +69,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<exitResult> call, Response<exitResult> response) {
                         if(response.code()==200){
-                            Toast.makeText(MainActivity.this,
-                                    "Exited Successfully",Toast.LENGTH_LONG).show();
+                            exitResult result = response.body();
+
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                            builder1.setTitle("Exited "+result.getVehicleNumber());
+                            builder1.setMessage("Amount to be paid: Rs "+result.getAmount());
+
+                            builder1.show();
                         }else if (response.code()==404){
                             Toast.makeText(MainActivity.this,
                                     "Vehicle Not Found",Toast.LENGTH_LONG).show();
@@ -112,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
                             AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
                             builder1.setTitle(result.getVehicleNumber());
-                            builder1.setMessage(result.getSlot());
+                            builder1.setMessage("Parked at "+result.getSlot());
 
-                            builder.show();
+                            builder1.show();
                         }else if(response.code() == 404){
                             Toast.makeText(MainActivity.this,"No Slots available",
                                     Toast.LENGTH_LONG).show();
